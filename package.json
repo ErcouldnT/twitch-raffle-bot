@@ -4,7 +4,7 @@
   "description": "Listens to Twitch chat and auto-writes the commonly typing word for auto-joins the raffles on your behalf. Tracks your winnings and writes a message to the chat that you'd like to.",
   "main": "twitch.js",
   "scripts": {
-    "start": "node twitch"
+    "bot": "node twitch"
   },
   "repository": {
     "type": "git",

@@ -7,10 +7,14 @@
 > [dotenv](https://www.npmjs.com/package/dotenv) - *hiding your login credentials*
 
 ## Start the bot
+- Clone the repo
+```js
+npm i
+```
 - Take your [Twitch Chat OAuth Password](https://twitchapps.com/tmi/)
 - Set your login credentials in your ENV then
 ```js
-npm run start
+npm run bot
 ```
 
 ## Can be added
