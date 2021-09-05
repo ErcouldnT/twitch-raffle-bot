@@ -1,0 +1,32 @@
+{
+  "name": "twitch-raffle-bot",
+  "version": "1.0.0",
+  "description": "Listens to Twitch chat and auto-writes the commonly typing word for auto-joins the raffles on your behalf. Tracks your winnings and writes a message to the chat that you'd like to.",
+  "main": "twitch.js",
+  "scripts": {
+    "start": "node twitch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ErcouldnT/twitch-raffle-bot.git"
+  },
+  "keywords": [
+    "twitch",
+    "chat",
+    "bot",
+    "raffle",
+    "win"
+  ],
+  "author": "Ercode",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ErcouldnT/twitch-raffle-bot/issues"
+  },
+  "homepage": "https://github.com/ErcouldnT/twitch-raffle-bot#readme",
+  "dependencies": {
+    "tmi.js": "^1.8.5"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0"
+  }
+}
