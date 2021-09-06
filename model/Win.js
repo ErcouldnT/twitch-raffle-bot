@@ -6,6 +6,7 @@ const winSchema = new mongoose.Schema({
   channel: String,
   command: String,
   winner: String,
+  res: String,
 }, {
   timestamps: true
 });

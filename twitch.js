@@ -53,6 +53,7 @@ client.on('message', (channel, tags, message, self) => {
 			// channel  // watch channel object?
 			command,
 			// winner: process.env.username  // watch client object?
+			// res: win response to streamer
 		});
 		win.save().then(() => console.log('********** WIN SAVED! **********'));
 	};
