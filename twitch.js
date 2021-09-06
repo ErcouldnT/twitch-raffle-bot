@@ -3,6 +3,7 @@ const tmi = require('tmi.js');
 require('dotenv').config();
 
 const Win = require('./model/Win');
+const Raffle = require('./model/Raffle');
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -34,7 +35,7 @@ const areEqual = arr => new Set(arr).size === 1;
 // say something to chat in a long period of time to act like a real person
 
 client.on('message', (channel, tags, message, self) => {
-	if(self) return;  // doesn't care about your own msg
+	// if(self) return;  // doesn't care about your own msg
 	
 	// check message includes your name (win condition?)
 	if (tags.username === 'nightbot' && message.toLowerCase().includes(process.env.username.toLowerCase())) {
@@ -49,10 +50,10 @@ client.on('message', (channel, tags, message, self) => {
 		// 3. mongodb
 		const win = new Win({
 			message,
-			// from: tags.username
-			// channel  // watch channel object?
+			// from: tags.username,
+			// channel,  // watch channel object?
 			command,
-			// winner: process.env.username  // watch client object?
+			// winner: process.env.username,  // watch client object?
 			// res: win response to streamer
 		});
 		win.save().then(() => console.log('********** WIN SAVED! **********'));
@@ -76,6 +77,12 @@ client.on('message', (channel, tags, message, self) => {
 		console.log('********* RAFFLE STARTED *********:', command);
 		client.say(channel, command);  // joins the raffle
 		raffle = [];  // clear the list
+		const raffle = new Raffle({
+			command,
+			// channel,
+			// username
+		});
+		raffle.save().then(() => console.log('********** JOINED A RAFFLE! **********'));
 	};
 });
 
