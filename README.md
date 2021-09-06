@@ -7,7 +7,7 @@
 > [dotenv](https://www.npmjs.com/package/dotenv) - *hiding your login credentials*
 
 ## Start the bot
-- Clone the repo
+- Clone the repo and install dependencies via
 ```js
 npm i
 ```
@@ -18,9 +18,12 @@ npm run bot
 ```
 
 ## Can be added
-* [ ] Give feedback to streamer if you won.
+* [x] MongoDB to save wins.
+* [x] Give feedback to streamer if you won.
 * [ ] Use JS timers to avoid multiple joining.
 * [ ] Send an email that includes you won a prize.
+* [ ] Act like a real person while hanging around in chat.
+* [ ] Listen and join multiple twitch channels at the same time.
 
 ## Deployment
 > [AWS EC2](https://aws.amazon.com/ec2) - *running 24/7*

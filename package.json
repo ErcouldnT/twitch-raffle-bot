@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/ErcouldnT/twitch-raffle-bot#readme",
   "dependencies": {
+    "mongoose": "^6.0.4",
     "tmi.js": "^1.8.5"
   },
   "devDependencies": {

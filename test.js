@@ -8,3 +8,5 @@ if (areEqual(list)) {
   console.log(list, "not equal");
 }
 
+// nightbot: ykpklc_ has won the giveaway.
+
