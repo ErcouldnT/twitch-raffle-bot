@@ -23,7 +23,7 @@ const client = new tmi.Client({
 
 client.connect();
 
-let raffle = [];  // to collect last messages
+let messages = [];  // to collect last messages
 let count = 5;    // last messages you want to count
 let command = '';
 const areEqual = arr => new Set(arr).size === 1;
@@ -63,20 +63,20 @@ client.on('message', (channel, tags, message, self) => {
 	console.log(`${tags.username}: ${message}`);  // to see what messages bot reading
 
 	const msg = message.trim();
-	raffle.push(msg);
+	messages.push(msg);
 
-	if (raffle.length > count) {
+	if (messages.length > count) {
 		// if the list exceeds the limit, delete the first msg.
-		raffle.shift();
+		messages.shift();
 	};
 
-	if (raffle.length === count && areEqual(raffle)) {
+	if (messages.length === count && areEqual(messages)) {
 		// checks all messages in the list are equal
-		console.log(raffle);
-		command = raffle[0];  // raffle command
+		console.log(messages);
+		command = messages[0];  // raffle command
 		console.log('********* RAFFLE STARTED *********:', command);
 		client.say(channel, command);  // joins the raffle
-		raffle = [];  // clear the list
+		messages = [];  // clear the list
 		const raffle = new Raffle({
 			command,
 			// channel,
