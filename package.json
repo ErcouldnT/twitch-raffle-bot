@@ -4,7 +4,8 @@
   "description": "Listens to Twitch chat and auto-writes the commonly typing word for auto-joins the raffles on your behalf. Tracks your winnings and writes a message to the chat that you'd like to.",
   "main": "twitch.js",
   "scripts": {
-    "bot": "node twitch"
+    "dev": "nodemon src/twitch",
+    "bot": "node src/twitch"
   },
   "repository": {
     "type": "git",
@@ -24,10 +25,11 @@
   },
   "homepage": "https://github.com/ErcouldnT/twitch-raffle-bot#readme",
   "dependencies": {
-    "mongoose": "^6.0.4",
+    "delay": "^5.0.0",
+    "dotenv": "^16.0.3",
     "tmi.js": "^1.8.5"
   },
   "devDependencies": {
-    "dotenv": "^10.0.0"
+    "nodemon": "^2.0.20"
   }
 }
