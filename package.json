@@ -1,11 +1,12 @@
 {
   "name": "twitch-raffle-bot",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Listens to Twitch chat and auto-writes the commonly typing word for auto-joins the raffles on your behalf. Tracks your winnings and writes a message to the chat that you'd like to.",
   "main": "twitch.js",
   "scripts": {
     "dev": "nodemon src/twitch",
-    "bot": "node src/twitch"
+    "bot": "node src/twitch",
+    "web": "npx prisma studio"
   },
   "repository": {
     "type": "git",
@@ -16,7 +17,8 @@
     "chat",
     "bot",
     "raffle",
-    "win"
+    "win",
+    "prisma"
   ],
   "author": "Ercode",
   "license": "MIT",
@@ -25,11 +27,13 @@
   },
   "homepage": "https://github.com/ErcouldnT/twitch-raffle-bot#readme",
   "dependencies": {
+    "@prisma/client": "^4.10.1",
     "delay": "^5.0.0",
     "dotenv": "^16.0.3",
     "tmi.js": "^1.8.5"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "prisma": "^4.10.1"
   }
 }

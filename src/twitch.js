@@ -1,32 +1,26 @@
-const delay = require("delay");
 const tmi = require("tmi.js");
+const delay = require("delay");
+const { PrismaClient } = require("@prisma/client");
 
 require("dotenv").config();
+const username = process.env.USERNAME.toLowerCase().trim();
+const password = process.env.PASSWORD.toLowerCase().trim();
 
 // add channels here
-const channels = ["Kozbishoww", "Ercouldnt"];
-const count = 3; // last messages you want to track for detecting raffle command
+const channels = ["ercodelabs", "kozbishoww", "targetlocated"];
+const count = 5; // last messages you want to track for detecting raffle command
+const timer = 1000 * 60 * 2; // to avoid joining to same raffle for 2 minutes
 const debug = true;
+const prisma = new PrismaClient();
 
 const areEqual = (arr) => new Set(arr).size === 1;
-
-// const config = {
-//   onJoinedRaffle: {
-//     SEND_AN_EMAIL_WHEN_JOINED: true,
-//     SAVE_ALL_JOINED_RAFFLES_TO_DATABASE: true,
-//   },
-//   onWon: {
-//     SEND_AN_EMAIL_WHEN_WON: true,
-//     SAVE_TO_DATABASE_WHEN_WON: true,
-//   },
-// };
 
 // login credentials
 const client = new tmi.Client({
   options: { debug },
   identity: {
-    username: process.env.username,
-    password: process.env.password,
+    username,
+    password,
   },
   channels,
 });
@@ -40,6 +34,8 @@ for (let i = 0; i < channels.length; i++) {
   const channelObject = {
     channel,
     messages: [],
+    raffleId: "",
+    raffleTime: "",
     raffleCommand: "",
     raffleStarted: false,
     raffleWon: false,
@@ -62,33 +58,64 @@ client.on("message", async (channel, tags, message, self) => {
   // check message includes your name (--Win Condition--)
   if (
     // tags.username === "nightbot" &&
-    message.toLowerCase().includes(process.env.username.toLowerCase())
+    message.toLowerCase().includes(username) &&
+    // and if the raffleStarted is true
+    trackingChannels[channel].raffleStarted
   ) {
-    console.log("********** YOU WON! **********", process.env.username);
+    console.log("********** YOU WON! **********", username);
     trackingChannels[channel].raffleWon = true; // make it false when it saved to db or emailed
     trackingChannels[channel].raffleStarted = false;
+
+    // 1. send an email to yourself
+    // 2. or write a .json file
+    // 3. prisma to db
+    const raffle = await prisma.raffle.update({
+      include: {
+        win: {
+          include: {
+            username: true,
+            channel: true,
+            raffle: true,
+          },
+        },
+      },
+      where: {
+        id: trackingChannels[channel].raffleId,
+      },
+      data: {
+        win: {
+          create: {
+            winMsg: message,
+            from: tags.username,
+            yourMsg: "yeassssss!", // TODO: create random message
+            username: {
+              connectOrCreate: {
+                where: { username },
+                create: { username },
+              },
+            },
+            channel: {
+              connectOrCreate: {
+                where: { channel },
+                create: { channel },
+              },
+            },
+          },
+        },
+      },
+    });
+    console.log(raffle.win);
+    trackingChannels[channel].raffleId = "";
+    trackingChannels[channel].raffleTime = "";
+    trackingChannels[channel].raffleWon = false;
 
     // say something to chat in 5 sec
     // or a random sentence from an array
     await delay(5000);
     client.say(channel, "yeassssss!");
-
-    // 1. send an email to yourself
-    // 2. or write a .json file
-    // 3. prisma to db
-
-    // saves win to db
-    // const win = new Win({
-    //   message,
-    //   // from: tags.username,
-    //   // channel,  // watch channel object?
-    //   command,
-    //   // winner: process.env.username,  // watch client object?
-    //   // res: win response to streamer
-    // });
-    // win.save().then(() => console.log("********** WIN SAVED! **********"));
   }
 
+  // (--Trying to detect Raffle Command--)
   trackingChannels[channel].messages.push(message.trim());
 
   if (trackingChannels[channel].messages.length > count) {
@@ -96,30 +123,49 @@ client.on("message", async (channel, tags, message, self) => {
     trackingChannels[channel].messages.shift();
   }
 
+  // (--Join Condition--)
   if (
     trackingChannels[channel].messages.length === count &&
-    areEqual(trackingChannels[channel].messages)
-  ) {
     // checks all messages in the list are equal
+    areEqual(trackingChannels[channel].messages) &&
+    // raffleTime check to avoid multiple joining for same raffle
+    Date.now() - trackingChannels[channel].raffleTime > timer
+  ) {
     trackingChannels[channel].raffleCommand =
       trackingChannels[channel].messages[0]; // raffle command
+    // Use raffleTime otherwise raffleStarted won't be false again (never win)
+    client.say(channel, trackingChannels[channel].raffleCommand); // joins the raffle
+    trackingChannels[channel].raffleStarted = true;
+    trackingChannels[channel].raffleTime = Date.now();
+    trackingChannels[channel].messages = []; // clear the list
     console.log(
       "********* RAFFLE STARTED *********:",
       trackingChannels[channel].raffleCommand
     );
-    client.say(channel, trackingChannels[channel].raffleCommand); // joins the raffle
-    trackingChannels[channel].raffleStarted = true;
-    trackingChannels[channel].messages = []; // clear the list
 
     // saves raffle to db
-    // const raffle = new Raffle({
-    //   command,
-    //   // channel,
-    //   // username
-    // });
-    // raffle
-    //   .save()
-    //   .then(() => console.log("********** JOINED A RAFFLE! **********"));
+    const raffle = await prisma.raffle.create({
+      include: {
+        username: true,
+        channel: true,
+      },
+      data: {
+        raffleCmd: trackingChannels[channel].raffleCommand,
+        username: {
+          connectOrCreate: {
+            where: { username },
+            create: { username },
+          },
+        },
+        channel: {
+          connectOrCreate: {
+            where: { channel },
+            create: { channel },
+          },
+        },
+      },
+    });
+    console.log(raffle);
+    trackingChannels[channel].raffleId = raffle.id;
   }
-  // console.log(trackingChannels);
 });

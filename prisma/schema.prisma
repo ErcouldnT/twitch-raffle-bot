@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  username  String   @unique
+  raffles   Raffle[]
+  wins      Win[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Channel {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  channel   String   @unique
+  raffles   Raffle[]
+  wins      Win[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Raffle {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  username  User     @relation(fields: [userId], references: [id])
+  channel   Channel  @relation(fields: [channelId], references: [id])
+  raffleCmd String
+  win       Win?
+  joinedAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String   @db.ObjectId
+  channelId String   @db.ObjectId
+}
+
+model Win {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  username  User     @relation(fields: [userId], references: [id])
+  winMsg    String
+  from      String
+  channel   Channel  @relation(fields: [channelId], references: [id])
+  yourMsg   String
+  raffle    Raffle   @relation(fields: [raffleId], references: [id])
+  wonAt     DateTime @default(now())
+  // updatedAt DateTime @updatedAt
+  userId    String   @db.ObjectId
+  channelId String   @db.ObjectId
+  raffleId  String   @unique @db.ObjectId
+}

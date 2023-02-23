@@ -18,6 +18,7 @@ npm i
 
 - Take your [Twitch Chat OAuth Password](https://twitchapps.com/tmi/)
 - Set your login credentials in your ENV then
+- `npx prisma db push`
 
 ```js
 npm run bot
@@ -25,10 +26,10 @@ npm run bot
 
 ## Can be added
 
-- [ ] Prisma ORM to save wins.
-- [x] Give feedback to streamer if you won.
-- [ ] Use JS timers to avoid multiple joining.
+- [x] Prisma ORM to save wins to database.
+- [x] Add some logic to avoid multiple joining.
 - [ ] Send an email that includes you won a prize.
+- [x] Give feedback to streamer if you won in 5 seconds.
 - [ ] Act like a real person while hanging around in chat.
 - [x] Listen and join multiple twitch channels at the same time.
 
