@@ -6,7 +6,8 @@
 ## Used techs
 
 > [tmi.js](https://tmijs.com) - _connecting twitch chat_ \
-> [dotenv](https://www.npmjs.com/package/dotenv) - _hiding your login credentials_
+> [dotenv](https://www.npmjs.com/package/dotenv) - _hiding your login credentials_ \
+> [prisma](https://www.prisma.io) - _database connection_
 
 ## Start the bot
 
@@ -18,10 +19,16 @@ npm i
 
 - Take your [Twitch Chat OAuth Password](https://twitchapps.com/tmi/)
 - Set your login credentials in your ENV then
-- `npx prisma db push`
+- Apply database schema `npx prisma db push`
 
 ```js
 npm run bot
+```
+
+- Open web interface
+
+```js
+npm run web
 ```
 
 ## Can be added

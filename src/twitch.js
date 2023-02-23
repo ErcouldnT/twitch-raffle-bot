@@ -116,16 +116,16 @@ client.on("message", async (channel, tags, message, self) => {
   }
 
   // (--Trying to detect Raffle Command--)
-  trackingChannels[channel].messages.push(message.trim());
+  trackingChannels[channel]?.messages.push(message.trim());
 
-  if (trackingChannels[channel].messages.length > count) {
+  if (trackingChannels[channel]?.messages.length > count) {
     // if the list exceeds the limit, delete the first msg.
     trackingChannels[channel].messages.shift();
   }
 
   // (--Join Condition--)
   if (
-    trackingChannels[channel].messages.length === count &&
+    trackingChannels[channel]?.messages.length === count &&
     // checks all messages in the list are equal
     areEqual(trackingChannels[channel].messages) &&
     // raffleTime check to avoid multiple joining for same raffle
