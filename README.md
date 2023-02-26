@@ -36,6 +36,7 @@ npm run web
 - [x] Prisma ORM to save wins to database.
 - [x] Add some logic to avoid multiple joining.
 - [ ] Send an email that includes you won a prize.
+- [ ] Desktop notification when joined raffle and won.
 - [x] Give feedback to streamer if you won in 5 seconds.
 - [ ] Act like a real person while hanging around in chat.
 - [x] Listen and join multiple twitch channels at the same time.

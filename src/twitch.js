@@ -7,7 +7,7 @@ const username = process.env.USERNAME.toLowerCase().trim();
 const password = process.env.PASSWORD.toLowerCase().trim();
 
 // add channels here
-const channels = ["ercodelabs", "kozbishoww", "targetlocated"];
+const channels = ["ercodelabs", "kozbishoww", "targetlocated", "tuce"];
 const count = 5; // last messages you want to track for detecting raffle command
 const timer = 1000 * 60 * 2; // to avoid joining to same raffle for 2 minutes
 const debug = true;
@@ -60,7 +60,7 @@ client.on("message", async (channel, tags, message, self) => {
     // tags.username === "nightbot" &&
     message.toLowerCase().includes(username) &&
     // and if the raffleStarted is true
-    trackingChannels[channel].raffleStarted
+    trackingChannels[channel]?.raffleStarted
   ) {
     console.log("********** YOU WON! **********", username);
     trackingChannels[channel].raffleWon = true; // make it false when it saved to db or emailed
